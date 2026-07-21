@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>حلقة حمزة بن عبد المطلب</title>
+
+<style>
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Tahoma,sans-serif;
+}
+
+body{
+background:#f4f6f9;
+padding:20px;
+}
+
+.container{
+max-width:700px;
+margin:auto;
+}
+
+.header{
+background:#16a34a;
+color:#fff;
+padding:20px;
+border-radius:20px;
+text-align:center;
+margin-bottom:20px;
+}
+
+.card{
+background:#fff;
+padding:15px;
+margin-bottom:12px;
+border-radius:15px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+box-shadow:0 2px 10px rgba(0,0,0,.08);
+}
+
+.rank{
+font-size:22px;
+}
+
+.name{
+font-size:18px;
+font-weight:bold;
+}
+
+.points{
+color:#16a34a;
+font-weight:bold;
+}
+
+.loading{
+text-align:center;
+padding:20px;
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+
+<div class="header">
+<h1>🏆 حلقة حمزة بن عبد المطلب رضي الله عنه</h1>
+<p>لوحة النقاط</p>
+</div>
+
+<div id="students">
+<div class="loading">جاري تحميل النقاط...</div>
+</div>
+
+</div>
+
+<script>
+async function loadStudents(){
+
+try{
+
+const res = await fetch("./students.json");
+let students = await res.json();
+
+students.sort((a,b)=>b.points-a.points);
+
+let html="";
+
+students.forEach((student,index)=>{
+
+let medal = `${index+1}️⃣`;
+
+if(index===0) medal="🥇";
+if(index===1) medal="🥈";
+if(index===2) medal="🥉";
+
+html += `
+<div class="card">
+
+<div>
+<div class="rank">${medal}</div>
+</div>
+
+<div style="flex:1;text-align:center">
+<div class="name">${student.name}</div>
+</div>
+
+<div class="points">
+${student.points} نقطة
+</div>
+
+</div>
+`;
+});
+
+document.getElementById("students").innerHTML = html;
+
+}catch(err){
+
+document.getElementById("students").innerHTML =
+"<div class='loading'>حدث خطأ في تحميل البيانات</div>";
+
+}
+
+}
+
+loadStudents();
+</script>
+
+</body>
+</html>
